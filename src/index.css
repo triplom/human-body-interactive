@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #0f172a;
+  color: #e2e8f0;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* SVG body part hover/highlight transitions */
+.body-part {
+  transition: fill 0.25s ease, opacity 0.25s ease, filter 0.25s ease;
+  cursor: pointer;
+}
+
+.body-part:hover,
+.body-part.hovered {
+  filter: brightness(1.4) drop-shadow(0 0 6px currentColor);
+  opacity: 1 !important;
+}
+
+.body-part.selected {
+  filter: brightness(1.6) drop-shadow(0 0 10px currentColor);
+  opacity: 1 !important;
+}
+
+/* Modal animation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-backdrop {
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-content {
+  animation: slideUp 0.25s ease;
+}
+
+/* Tooltip animation */
+@keyframes tooltipAppear {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.tooltip {
+  animation: tooltipAppear 0.15s ease;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* SVG layer fade */
+.svg-layer {
+  transition: opacity 0.3s ease;
+}
