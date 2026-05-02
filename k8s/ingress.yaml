@@ -14,7 +14,7 @@ metadata:
     # Uncomment if using cert-manager for TLS
     # cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
-  # ingressClassName: nginx  # Uncomment if using nginx ingress controller
+  ingressClassName: nginx
   rules:
     - host: human-body.local
       http:
