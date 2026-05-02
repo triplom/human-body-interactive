@@ -12,7 +12,8 @@ COPY . .
 RUN npm run build
 
 # ── Stage 2: Serve ─────────────────────────────────────────────────────────
-FROM nginx:1.27-alpine AS runtime
+# nginx-unprivileged runs as user 101 on port 8080 without root access
+FROM nginxinc/nginx-unprivileged:1.27-alpine AS runtime
 
 # Remove default nginx config
 RUN rm /etc/nginx/conf.d/default.conf
@@ -22,15 +23,6 @@ COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy built app
 COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Non-root user for security
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup \
-    && chown -R appuser:appgroup /usr/share/nginx/html \
-    && chown -R appuser:appgroup /var/cache/nginx \
-    && touch /var/run/nginx.pid \
-    && chown -R appuser:appgroup /var/run/nginx.pid
-
-USER appuser
 
 EXPOSE 8080
 
