@@ -1,92 +1,113 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  margin: 0;
-  background: #0f172a;
-  color: #e2e8f0;
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+  background: #f0f2f5;
+  color: #1a202c;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  height: 100vh;
 }
 
-#root {
-  min-height: 100vh;
+#root { height: 100vh; display: flex; flex-direction: column; }
+
+/* ── Organ animations ─────────────────────────────────────────────── */
+@keyframes heartbeat {
+  0%,100% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(220,38,38,0.5)); }
+  14%      { transform: scale(1.08); filter: drop-shadow(0 0 10px rgba(220,38,38,0.9)); }
+  28%      { transform: scale(1.02); filter: drop-shadow(0 0 6px rgba(220,38,38,0.6)); }
+  42%      { transform: scale(1.08); filter: drop-shadow(0 0 10px rgba(220,38,38,0.9)); }
+  70%      { transform: scale(1); filter: drop-shadow(0 0 4px rgba(220,38,38,0.5)); }
 }
 
-/* SVG body part hover/highlight transitions */
-.body-part {
-  transition: fill 0.25s ease, opacity 0.25s ease, filter 0.25s ease;
-  cursor: pointer;
+@keyframes breathe {
+  0%,100% { transform: scaleY(1) scaleX(1); opacity: 0.82; }
+  50%      { transform: scaleY(1.04) scaleX(1.02); opacity: 0.95; }
 }
 
-.body-part:hover,
-.body-part.hovered {
-  filter: brightness(1.4) drop-shadow(0 0 6px currentColor);
-  opacity: 1 !important;
+@keyframes nerveFlow {
+  0%   { stroke-dashoffset: 200; opacity: 0.4; }
+  50%  { opacity: 0.9; }
+  100% { stroke-dashoffset: 0;   opacity: 0.4; }
 }
 
-.body-part.selected {
-  filter: brightness(1.6) drop-shadow(0 0 10px currentColor);
-  opacity: 1 !important;
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 
-/* Modal animation */
 @keyframes fadeIn {
   from { opacity: 0; }
-  to { opacity: 1; }
+  to   { opacity: 1; }
 }
 
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(24px) scale(0.97); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+@keyframes tooltipPop {
+  from { opacity: 0; transform: translateY(6px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-.modal-backdrop {
-  animation: fadeIn 0.2s ease;
+@keyframes pulse-glow {
+  0%,100% { opacity: 0.7; }
+  50%      { opacity: 1; }
 }
 
-.modal-content {
-  animation: slideUp 0.25s ease;
+/* ── Body part interactivity ─────────────────────────────────────── */
+.body-part {
+  cursor: pointer;
+  transition: filter 0.2s ease, opacity 0.2s ease;
+}
+.body-part:hover { filter: brightness(1.25) drop-shadow(0 0 8px currentColor); }
+.body-part.active { filter: brightness(1.4) drop-shadow(0 0 12px currentColor); }
+
+/* ── Heart animation ─────────────────────────────────────────────── */
+.organ-heart {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: heartbeat 1.2s ease-in-out infinite;
 }
 
-/* Tooltip animation */
-@keyframes tooltipAppear {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+/* ── Lungs animation ─────────────────────────────────────────────── */
+.organ-lung-l {
+  transform-box: fill-box;
+  transform-origin: 100% 50%;
+  animation: breathe 3.5s ease-in-out infinite;
+}
+.organ-lung-r {
+  transform-box: fill-box;
+  transform-origin: 0% 50%;
+  animation: breathe 3.5s ease-in-out infinite;
 }
 
-.tooltip {
-  animation: tooltipAppear 0.15s ease;
+/* ── Nerve animation ─────────────────────────────────────────────── */
+.nerve-path {
+  stroke-dasharray: 8 4;
+  animation: nerveFlow 2.5s linear infinite;
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
+/* ── Info panel ─────────────────────────────────────────────────── */
+.info-panel { animation: fadeSlideIn 0.28s cubic-bezier(0.34,1.56,0.64,1); }
+.tooltip    { animation: tooltipPop  0.15s ease; pointer-events: none; }
 
-::-webkit-scrollbar-track {
-  background: #1e293b;
+/* ── System label pills ─────────────────────────────────────────── */
+.system-btn {
+  transition: all 0.18s ease;
+  white-space: nowrap;
 }
+.system-btn:hover { transform: translateY(-1px); }
+.system-btn.active { box-shadow: 0 4px 14px rgba(0,0,0,0.18); }
 
-::-webkit-scrollbar-thumb {
-  background: #475569;
-  border-radius: 3px;
-}
+/* ── Scrollbar ───────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 3px; }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #64748b;
-}
-
-/* SVG layer fade */
-.svg-layer {
-  transition: opacity 0.3s ease;
+/* ── Body silhouette glow ────────────────────────────────────────── */
+.body-glow {
+  filter: drop-shadow(0 8px 32px rgba(0,0,0,0.12));
 }

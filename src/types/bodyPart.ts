@@ -1,5 +1,5 @@
 export type BodySystem = 'organs' | 'muscles' | 'skeleton' | 'nervous';
-export type BodyView = 'front' | 'back';
+export type BodyView   = 'front' | 'back';
 
 export interface BodyPartDetails {
   description: string;
@@ -14,30 +14,61 @@ export interface BodyPart {
   name: string;
   system: BodySystem;
   view: BodyView | 'both';
-  /** SVG path `d` attribute string */
+  /** SVG path `d` attribute */
   svgPath: string;
-  /** Short text shown in hover tooltip */
+  /** Optional extra paths (e.g. rib lines, fissures) rendered as strokes */
+  detailPaths?: string[];
+  /** CSS class added to the element (for animations) */
+  animClass?: string;
   briefDescription: string;
   details: BodyPartDetails;
-  /** Default fill color (CSS color string) */
   color: string;
-  /** Fill color on hover / selection */
-  highlightColor: string;
+  hoverColor: string;
+  opacity?: number;
 }
 
-export interface TooltipState {
-  visible: boolean;
-  x: number;
-  y: number;
-  partId: string | null;
-}
-
-export interface AppState {
-  activeSystem: BodySystem;
-  activeView: BodyView;
-  hoveredPartId: string | null;
-  selectedPartId: string | null;
-}
+// ── System metadata ─────────────────────────────────────────────────────────
+export const SYSTEM_META: Record<BodySystem, {
+  label: string;
+  accent: string;
+  bg: string;
+  border: string;
+  hex: string;
+  hoverHex: string;
+}> = {
+  organs: {
+    label: 'Organs',
+    accent: 'text-rose-600',
+    bg: 'bg-rose-50',
+    border: 'border-rose-300',
+    hex: '#e11d48',
+    hoverHex: '#fb7185',
+  },
+  muscles: {
+    label: 'Muscles',
+    accent: 'text-orange-600',
+    bg: 'bg-orange-50',
+    border: 'border-orange-300',
+    hex: '#c2410c',
+    hoverHex: '#f97316',
+  },
+  skeleton: {
+    label: 'Skeleton',
+    accent: 'text-stone-600',
+    bg: 'bg-stone-50',
+    border: 'border-stone-300',
+    hex: '#78716c',
+    hoverHex: '#d6d3d1',
+  },
+  nervous: {
+    label: 'Nervous',
+    accent: 'text-amber-600',
+    bg: 'bg-amber-50',
+    border: 'border-amber-300',
+    hex: '#d97706',
+    hoverHex: '#fbbf24',
+  },
+};
 
 export const SYSTEM_LABELS: Record<BodySystem, string> = {
   organs: 'Organs',
@@ -46,9 +77,4 @@ export const SYSTEM_LABELS: Record<BodySystem, string> = {
   nervous: 'Nervous System',
 };
 
-export const SYSTEM_COLORS: Record<BodySystem, { base: string; highlight: string; text: string }> = {
-  organs:   { base: '#be123c', highlight: '#fb7185', text: 'text-rose-400' },
-  muscles:  { base: '#b91c1c', highlight: '#f87171', text: 'text-red-400' },
-  skeleton: { base: '#a8a29e', highlight: '#f5f5f4', text: 'text-stone-300' },
-  nervous:  { base: '#b45309', highlight: '#fcd34d', text: 'text-amber-300' },
-};
+export const SYSTEM_COLORS = SYSTEM_META;

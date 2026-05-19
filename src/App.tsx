@@ -1,8 +1,8 @@
-import BodyViewer from './components/BodyViewer';
+import BodyExplorer from './components/BodyExplorer';
 import './index.css';
 
 function App() {
-  return <BodyViewer />;
+  return <BodyExplorer />;
 }
 
 export default App;
